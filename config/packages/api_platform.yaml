@@ -1,4 +1,7 @@
 api_platform:
+    collection:
+        pagination:
+            page_parameter_name: _page
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     swagger:
