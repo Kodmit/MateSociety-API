@@ -1,0 +1,47 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\User: bcrypt
+
+    providers:
+        doctrine_user:
+            entity:
+                class: App\Entity\User
+                property: username
+
+    role_hierarchy:
+        ROLE_WRITER: ROLE_USER
+        ROLE_ADMIN: [ROLE_USER, ROLE_WRITER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    firewalls:
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
+            provider: doctrine_user
+            json_login:
+                check_path: /api/login_check
+                username_path: username
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        main:
+            pattern:   ^/api
+            provider: doctrine_user
+            stateless: true
+            anonymous: true
+            guard:
+                authenticators:
+                - lexik_jwt_authentication.jwt_token_authenticator
+
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+    access_control:
+    - { path: ^/api/.*, roles: IS_AUTHENTICATED_FULLY, allow_if: "'127.0.0.1' == request.getClientIp()" }
+    - { path: ^/admin/.*, roles: IS_AUTHENTICATED_FULLY, allow_if: "'127.0.0.1' == request.getClientIp()" }
+    - { path: ^/api$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin$, roles: ROLE_USER }
