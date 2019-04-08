@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"read_country"}},
  *     denormalizationContext={"groups"={"write_country"}}
  * )
+ * @ORM\Table(name="countries")
  * @ORM\Entity(repositoryClass="App\Repository\CountryRepository")
  */
 class Country
@@ -34,13 +35,25 @@ class Country
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read_country"})
+     * @Groups({"read_country", "read_user"})
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="country")
+     */
+    private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Group", mappedBy="country")
+     */
+    private $groups;
 
 
     public function __construct()
     {
+        $this->users = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,6 +69,68 @@ class Country
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getCountry() === $this) {
+                $user->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): self
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups[] = $group;
+            $group->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+            // set the owning side to null (unless already changed)
+            if ($group->getCountry() === $this) {
+                $group->setCountry(null);
+            }
+        }
 
         return $this;
     }
