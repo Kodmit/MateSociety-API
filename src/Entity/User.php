@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     },
  *     collectionOperations={
  *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
- *         "post"={"validation_groups"={"Default", "postValidation"}}
+ *         "post"
  *     },
  *     itemOperations={
  *         "delete"={"access_control"="is_granted('ROLE_ADMIN')"},
@@ -31,6 +31,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *              "path"="/users/{id}/enable/{token}",
  *              "method"="GET",
  *              "swagger_context" = {
+ *                  "summary" = "Enable the user account",
  *                  "parameters" = {
  *                      {
  *                          "name" = "token",
@@ -48,6 +49,46 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *                      }
  *                  }
  *               }
+ *          },
+ *          "login"={
+ *              "route_name"="api_login_check",
+ *              "method"="POST",
+ *               "swagger_context" = {
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "body",
+ *                          "in" = "body",
+ *                          "required" = "false",
+ *                          "description" = "The JSON string to authenticate the user",
+ *                          "example"={
+ *                              "username"="xxxx",
+ *                              "password"="xxxx"
+ *                          }
+ *                      }
+ *                  },
+ *                  "responses" = {
+ *                      "200" = {
+ *                          "description" = "JWT Token is returned",
+ *                      },
+ *                      "400" = {
+ *                          "description" = "Invalid input"
+ *                      },
+ *                      "401" = {
+ *                          "description" = "Bad credentials"
+ *                      },
+ *                      "404" = {
+ *                          "description" = "resource not found"
+ *                      }
+ *                  },
+ *                  "summary" = "Send user credentials and retrieve JWT Token",
+ *                  "consumes" = {
+ *                      "application/json",
+ *                      "text/html",
+ *                   },
+ *                  "produces" = {
+ *                      "application/json"
+ *                   }
+ *              }
  *          }
  *     }
  * )
