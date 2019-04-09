@@ -7,9 +7,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     attributes={
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "normalization_context"={"groups"={"read_group"}},
+ *          "denormalization_context"={"groups"={"write_group"}}
+ *      },
+ *     collectionOperations={
+ *         "get",
+ *         "post"
+ *     },
+ *     itemOperations={
+ *          "get",
+ *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *     }
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "city": "exact", "description": "partial"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity("name")
  * @ORM\Table(name="groups")
@@ -25,53 +44,63 @@ class Group
 
     /**
      * @ORM\Column(type="string", length=160, unique=true)
+     * @Groups({"read_group", "write_group", "read_request"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_group"})
      */
     private $created_at;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_group"})
      */
     private $creator;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"read_group", "write_group"})
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="groups")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_group", "write_group"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=200)
+     * @Groups({"read_group", "write_group"})
      */
     private $city;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="_group", orphanRemoval=true)
+     * @Groups({"read_group"})
      */
     private $groupFeeds;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupInfo", mappedBy="_group", orphanRemoval=true)
+     * @Groups({"read_group"})
      */
     private $groupInfos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupGoal", mappedBy="_group", orphanRemoval=true)
+     * @Groups({"read_group"})
      */
     private $groupGoals;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\JoinRequest", mappedBy="_group", orphanRemoval=true)
+     * @Groups({"read_group"})
      */
     private $joinRequests;
 

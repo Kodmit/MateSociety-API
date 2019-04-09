@@ -6,9 +6,25 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     attributes={
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "normalization_context"={"groups"={"read_feed"}},
+ *          "denormalization_context"={"groups"={"write_feed"}}
+ *      },
+ *     collectionOperations={
+ *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
+ *         "post"
+ *     },
+ *     itemOperations={
+ *          "get"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\GroupFeedRepository")
  * @ORM\Table(name="group_feeds")
  */
@@ -24,6 +40,7 @@ class GroupFeed
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="groupFeeds")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_feed", "write_feed"})
      */
     private $_group;
 
