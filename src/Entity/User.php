@@ -82,8 +82,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *                  },
  *                  "summary" = "Send user credentials and retrieve JWT Token",
  *                  "consumes" = {
- *                      "application/json",
- *                      "text/html",
+ *                      "application/json"
  *                   },
  *                  "produces" = {
  *                      "application/json"
