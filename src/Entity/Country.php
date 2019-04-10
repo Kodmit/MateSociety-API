@@ -35,7 +35,7 @@ class Country
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read_country", "read_user"})
+     * @Groups({"read_country", "read_user", "read_group"})
      */
     private $name;
 

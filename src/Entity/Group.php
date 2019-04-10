@@ -50,9 +50,9 @@ class Group
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_group"})
+     * @Groups({"can_retrieve_group"})
      */
-    private $created_at;
+    public $created_at;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"})
@@ -82,27 +82,33 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"read_group"})
+     * @Groups({"is_creator", "is_admin"})
      */
     private $groupFeeds;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupInfo", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"read_group"})
+     * @Groups({"is_creator", "is_admin"})
      */
     private $groupInfos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupGoal", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"read_group"})
+     * @Groups({"is_creator", "is_admin"})
      */
     private $groupGoals;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\JoinRequest", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"read_group"})
+     * @Groups({"is_creator", "is_admin"})
      */
     private $joinRequests;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="group_member")
+     * @Groups({"is_creator", "is_admin"})
+     */
+    private $users;
 
     public function __construct()
     {
@@ -111,6 +117,7 @@ class Group
         $this->groupGoals = new ArrayCollection();
         $this->joinRequests = new ArrayCollection();
         $this->created_at = new \DateTime();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -308,6 +315,37 @@ class Group
             // set the owning side to null (unless already changed)
             if ($joinRequest->getGroup() === $this) {
                 $joinRequest->setGroup(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setGroupMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getGroupMember() === $this) {
+                $user->setGroupMember(null);
             }
         }
 

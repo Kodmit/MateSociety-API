@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "access_control"="is_granted('ROLE_USER')"
  *      },
  *     collectionOperations={
- *         "get"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user or object._group.creator == user"},
+ *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
  *         "post"
  *     },
  *     itemOperations={

@@ -75,9 +75,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *                      },
  *                      "401" = {
  *                          "description" = "Bad credentials"
- *                      },
- *                      "404" = {
- *                          "description" = "resource not found"
  *                      }
  *                  },
  *                  "summary" = "Send user credentials and retrieve JWT Token",
@@ -112,7 +109,7 @@ class User implements UserInterface
      *      min = 2,
      *      max = 50
      * )
-     * @Groups({"read_user", "write_user"})
+     * @Groups({"read_user", "write_user", "read_group"})
      */
     private $username;
 
@@ -216,6 +213,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\JoinRequest", mappedBy="creator", orphanRemoval=true)
      */
     private $joinRequests;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="users")
+     */
+    private $group_member;
 
 
     public function __construct()
@@ -560,6 +562,18 @@ class User implements UserInterface
                 $joinRequest->setCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGroupMember(): ?Group
+    {
+        return $this->group_member;
+    }
+
+    public function setGroupMember(?Group $group_member): self
+    {
+        $this->group_member = $group_member;
 
         return $this;
     }
