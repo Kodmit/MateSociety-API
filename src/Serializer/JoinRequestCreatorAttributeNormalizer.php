@@ -4,17 +4,18 @@
 namespace App\Serializer;
 
 use App\Entity\Group;
+use App\Entity\JoinRequest;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class GroupCreatorAttributeNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+class JoinRequestCreatorAttributeNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'GROUP_CREATOR_ATTRIBUTE_NORMALIZER_ALREADY_CALLED';
+    private const ALREADY_CALLED = 'JOIN_REQUEST_CREATOR_ATTRIBUTE_NORMALIZER_ALREADY_CALLED';
 
     private $tokenStorage;
 
@@ -26,7 +27,7 @@ class GroupCreatorAttributeNormalizer implements ContextAwareNormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         if ($this->userHasPermissionsForGroup($object)) {
-            $context['groups'][] = 'is_creator:group';
+            $context['groups'][] = 'is_creator:join_request';
         }
 
         $context[self::ALREADY_CALLED] = true;
@@ -41,13 +42,15 @@ class GroupCreatorAttributeNormalizer implements ContextAwareNormalizerInterface
             return false;
         }
 
-        return $data instanceof Group;
+        return $data instanceof JoinRequest;
     }
 
     private function userHasPermissionsForGroup($object)
     {
+        /** @var JoinRequest $object */
+
         $user = $this->tokenStorage->getToken()->getUser();
-        if($object->getCreator() == $user)
+        if($object->getCreator() == $user || $object->getGroup()->getCreator() == $user)
             return true;
         return false;
     }

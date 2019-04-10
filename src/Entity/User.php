@@ -109,7 +109,7 @@ class User implements UserInterface
      *      min = 2,
      *      max = 50
      * )
-     * @Groups({"read_user", "write_user", "read_group"})
+     * @Groups({"read_user", "write_user", "read_group", "read_request"})
      */
     private $username;
 
@@ -148,9 +148,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_user"})
+     * @Groups({"read_user", "read_request"})
      */
-    private $created_at;
+    public $created_at;
 
     /**
      * @ORM\Column(type="string", length=190, unique=true)
@@ -162,13 +162,13 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"write_user", "read_user"})
+     * @Groups({"write_user", "read_user", "read_request"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"write_user", "read_user"})
+     * @Groups({"write_user", "read_user", "read_request"})
      */
     private $city;
 

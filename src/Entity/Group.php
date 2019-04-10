@@ -10,13 +10,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ApiResource(
  *     attributes={
- *          "access_control"="is_granted('ROLE_USER')",
- *          "normalization_context"={"groups"={"read_group"}},
- *          "denormalization_context"={"groups"={"write_group"}}
+ *          "access_control"="is_granted('ROLE_USER')"
  *      },
  *     collectionOperations={
  *         "get",
@@ -25,8 +24,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *          "get",
  *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
- *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
- *     }
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
+ *     },
+ *     normalizationContext={"groups"={"read_group"}},
+ *     denormalizationContext={"groups"={"write_group"}}
  * )
  * @ApiFilter(SearchFilter::class, properties={"name": "partial", "city": "exact", "description": "partial"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
@@ -50,7 +51,7 @@ class Group
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"can_retrieve_group"})
+     * @Groups({"read_group"})
      */
     public $created_at;
 
@@ -82,31 +83,32 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator", "is_admin"})
+     * @Groups({"is_creator:group", "is_admin"})
      */
     private $groupFeeds;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupInfo", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator", "is_admin"})
+     * @Groups({"is_creator:group", "is_admin"})
      */
     private $groupInfos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupGoal", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator", "is_admin"})
+     * @Groups({"is_creator:group", "is_admin"})
      */
     private $groupGoals;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\JoinRequest", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator", "is_admin"})
+     * @ApiSubresource
+     * @Groups({"is_creator:group", "is_admin"})
      */
     private $joinRequests;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="group_member")
-     * @Groups({"is_creator", "is_admin"})
+     * @Groups({"is_creator:group", "is_admin"})
      */
     private $users;
 

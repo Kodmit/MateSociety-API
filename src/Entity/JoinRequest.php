@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ApiResource(
@@ -38,44 +39,45 @@ class JoinRequest
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="joinRequests")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read_request"})
+     * @Groups({"is_creator:join_request"})
      */
     private $creator;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="joinRequests")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read_request", "write_request"})
+     * @ApiSubresource
+     * @Groups({"is_creator:join_request"})
      */
     public $_group;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_request"})
+     * @Groups({"is_creator:join_request"})
      */
-    private $created_at;
+    public $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"read_request"})
+     * @Groups({"is_creator:join_request"})
      */
-    private $updated_at;
+    public $updated_at;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"read_request", "write_request", "read_group"})
+     * @Groups({"is_creator:join_request", "read_group"})
      */
     private $message;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"read_request"})
+     * @Groups({"is_creator:join_request"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"read_request"})
+     * @Groups({"is_creator:join_request"})
      */
     private $response;
 
