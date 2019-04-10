@@ -19,7 +19,54 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *     itemOperations={
  *          "get"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
  *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
- *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "answer_join_request"={
+ *              "controller"=App\Controller\AnswerJoinRequest::class,
+ *              "path"="/join_requests/{id}/answer",
+ *              "method"="POST",
+ *              "swagger_context" = {
+ *                  "summary" = "Answer the join request",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "body",
+ *                          "in" = "body",
+ *                          "required" = "false",
+ *                          "description" = "The JSON string to answer the request",
+ *                          "example"={
+ *                              "response"="<accept/refuse>",
+ *                              "message"="<optional>"
+ *                          }
+ *                      },
+ *                      {
+ *                          "name" = "id",
+ *                          "in" = "path",
+ *                          "description" = "Join request ID.",
+ *                          "required" = "true",
+ *                          "type" : "integer",
+ *                      }
+ *                  },
+ *                  "responses" = {
+ *                      "201" = {
+ *                          "description" = "Join request answered and updated",
+ *                      },
+ *                      "400" = {
+ *                          "description" = "Invalid input"
+ *                      },
+ *                      "401" = {
+ *                          "description" = "Not authorized"
+ *                      },
+ *                      "406" = {
+ *                          "description" = "Request already answered"
+ *                      }
+ *                  },
+ *                  "consumes" = {
+ *                      "application/json"
+ *                   },
+ *                  "produces" = {
+ *                      "application/json"
+ *                   }
+ *               }
+ *          },
  *     },
  *     normalizationContext={"groups"={"read_request"}},
  *     denormalizationContext={"groups"={"write_request"}}
