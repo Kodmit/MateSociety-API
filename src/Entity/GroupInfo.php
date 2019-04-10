@@ -41,38 +41,38 @@ class GroupInfo
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="groupInfos")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read_info", "write_info"})
+     * @Groups({"is_member:group_info", "write_info"})
      * @KodAssert\IsCreator
      */
     public $_group;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"read_info", "write_info"})
+     * @Groups({"is_member:group_info", "write_info", "read_group"})
      */
     private $icon;
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"read_info", "write_info"})
+     * @Groups({"is_member:group_info", "write_info", "read_group"})
      */
     private $wording;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read_info", "write_info"})
+     * @Groups({"is_member:group_info", "write_info", "read_group"})
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"read_info", "write_info"})
+     * @Groups({"is_member:group_info", "write_info", "read_group"})
      */
     private $visibility;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_info"})
+     * @Groups({"is_member:group_info"})
      */
     public $created_at;
 

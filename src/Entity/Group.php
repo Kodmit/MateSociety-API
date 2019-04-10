@@ -89,6 +89,7 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupInfo", mappedBy="_group", orphanRemoval=true)
+     * @ApiSubresource
      * @Groups({"is_creator:group", "is_admin"})
      */
     private $groupInfos;
