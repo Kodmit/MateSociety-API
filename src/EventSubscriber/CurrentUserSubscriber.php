@@ -32,8 +32,10 @@ class CurrentUserSubscriber implements EventSubscriberInterface
 
         if($method == "POST"){
             if(method_exists($object, "setCreator")){
-                $object->setCreator($this->tokenStorage->getToken()->getUser());
-                $event->setControllerResult($object);
+                if(!$object->getCreator()){
+                    $object->setCreator($this->tokenStorage->getToken()->getUser());
+                    $event->setControllerResult($object);
+                }
             }
         }
 

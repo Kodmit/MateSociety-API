@@ -94,7 +94,7 @@ class JoinRequest
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="joinRequests")
      * @ORM\JoinColumn(nullable=false)
      * @ApiSubresource
-     * @Groups({"is_creator:join_request"})
+     * @Groups({"is_creator:join_request", "write_request"})
      */
     public $_group;
 
@@ -112,7 +112,7 @@ class JoinRequest
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"is_creator:join_request", "read_group"})
+     * @Groups({"is_creator:join_request", "read_group", "write_request"})
      */
     private $message;
 
