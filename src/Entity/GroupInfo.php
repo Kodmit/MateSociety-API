@@ -4,9 +4,28 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as KodAssert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     attributes={
+ *          "access_control"="is_granted('ROLE_USER')"
+ *      },
+ *     collectionOperations={
+ *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
+ *         "post"
+ *     },
+ *     itemOperations={
+ *          "get",
+ *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
+ *     },
+ *     normalizationContext={"groups"={"read_info"}},
+ *     denormalizationContext={"groups"={"write_info"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\GroupInfoRepository")
  * @ORM\Table(name="group_infos")
  */
@@ -22,33 +41,40 @@ class GroupInfo
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="groupInfos")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_info", "write_info"})
+     * @KodAssert\IsCreator
      */
-    private $_group;
+    public $_group;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Groups({"read_info", "write_info"})
      */
     private $icon;
 
     /**
      * @ORM\Column(type="string", length=200)
+     * @Groups({"read_info", "write_info"})
      */
     private $wording;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_info", "write_info"})
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"read_info", "write_info"})
      */
     private $visibility;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_info"})
      */
-    private $created_at;
+    public $created_at;
 
     public function __construct()
     {
