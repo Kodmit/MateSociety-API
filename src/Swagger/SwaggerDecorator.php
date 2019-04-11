@@ -16,7 +16,9 @@ final class SwaggerDecorator implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         $docs = $this->decorated->normalize($object, $format, $context);
-        $docs['info']['title'] = 'My Api Foo';
+        $docs['info']['title'] = 'MateSociety';
+        $docs['info']['version'] = '0.0.1';
+        $docs['basePath'] = '/api';
         return $docs;
     }
 
