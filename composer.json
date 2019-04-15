@@ -8,6 +8,7 @@
         "api-platform/admin-pack": "^1.0",
         "fzaninotto/faker": "^1.8",
         "lexik/jwt-authentication-bundle": "^2.6",
+        "ramsey/uuid-doctrine": "^1.5",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
