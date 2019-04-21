@@ -79,8 +79,10 @@ class MediaObject
      * @var string|null
      *
      * @ORM\Column(nullable=true)
+     * @Groups({"read_user"})
      */
     public $filePath;
+
 
     public function getId(): ?int
     {

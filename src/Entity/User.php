@@ -231,6 +231,7 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=MediaObject::class)
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
+     * @Groups({"write_user", "read_user"})
      */
     private $image;
 
@@ -600,8 +601,11 @@ class User implements UserInterface
 
     public function setImage(?MediaObject $image): self
     {
-        $this->image = $image;
+        if (isset($this->image)) {
+            unlink("../public/uploads/media/" . $this->image->filePath);
+        }
 
+        $this->image = $image;
         return $this;
     }
 }
