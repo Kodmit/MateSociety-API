@@ -46,7 +46,7 @@ class Group
 
     /**
      * @ORM\Column(type="string", length=160, unique=true)
-     * @Groups({"read_group", "write_group", "read_request"})
+     * @Groups({"read_group", "write_group", "read_request", "read_user"})
      */
     private $name;
 

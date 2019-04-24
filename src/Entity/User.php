@@ -25,8 +25,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "post"
  *     },
  *     itemOperations={
- *         "delete"={"access_control"="is_granted('ROLE_ADMIN')"},
- *         "get"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
+ *         "delete"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
+ *         "get"={"access_control"="is_granted('ROLE_USER')"},
  *         "put"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
  *         "enable_user"={
  *              "denormalization_context"={"groups"={"write_enable"}},
@@ -192,6 +192,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Group", mappedBy="creator", cascade={"persist", "remove"})
+     * @Groups({"read_user"})
      */
     private $owned_group;
 
@@ -222,8 +223,9 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="users")
+     * @Groups({"read_user"})
      */
-    private $group_member;
+    public $group_member;
 
     /**
      * @var MediaObject|null
