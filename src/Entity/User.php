@@ -222,7 +222,7 @@ class User implements UserInterface
     private $joinRequests;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="users", cascade={"persist"})
      * @Groups({"read_user"})
      */
     public $group_member;
@@ -236,6 +236,18 @@ class User implements UserInterface
      * @Groups({"write_user", "read_user"})
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     * @Groups({"write_user", "read_user"})
+     */
+    private $discord;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"write_user", "read_user"})
+     */
+    public $tox_id;
 
 
     public function __construct()
@@ -608,6 +620,30 @@ class User implements UserInterface
         }
 
         $this->image = $image;
+        return $this;
+    }
+
+    public function getDiscord(): ?string
+    {
+        return $this->discord;
+    }
+
+    public function setDiscord(?string $discord): self
+    {
+        $this->discord = $discord;
+
+        return $this;
+    }
+
+    public function getToxId(): ?string
+    {
+        return $this->tox_id;
+    }
+
+    public function setToxId(?string $tox_id): self
+    {
+        $this->tox_id = $tox_id;
+
         return $this;
     }
 }
