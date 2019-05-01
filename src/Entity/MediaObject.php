@@ -63,7 +63,7 @@ class MediaObject
      * @var string|null
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"media_object_read"})
+     * @Groups({"media_object_read", "read_user", "read_group"})
      */
     public $contentUrl;
 
@@ -83,7 +83,7 @@ class MediaObject
      * @var string|null
      *
      * @ORM\Column(nullable=true)
-     * @Groups({"read_user"})
+     * @Groups({"read_user", "read_group"})
      */
     public $filePath;
 

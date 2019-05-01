@@ -11,6 +11,9 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * @ApiResource(
@@ -81,6 +84,16 @@ class Group
      * @Groups({"read_group", "write_group"})
      */
     private $city;
+
+    /**
+     * @var MediaObject|null
+     *
+     * @ORM\ManyToOne(targetEntity=MediaObject::class)
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/image")
+     * @Groups({"read_group", "write_group"})
+     */
+    private $image;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="_group", orphanRemoval=true)
@@ -198,6 +211,21 @@ class Group
     {
         $this->city = $city;
 
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): self
+    {
+        if (isset($this->image)) {
+            unlink("../public/uploads/media/" . $this->image->filePath);
+        }
+
+        $this->image = $image;
         return $this;
     }
 

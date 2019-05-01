@@ -194,7 +194,7 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity="App\Entity\Group", mappedBy="creator", cascade={"persist", "remove"})
      * @Groups({"read_user"})
      */
-    private $owned_group;
+    public $owned_group;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\News", mappedBy="creator")
@@ -233,7 +233,7 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=MediaObject::class)
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"write_user", "read_user"})
+     * @Groups({"write_user", "read_user", "read_group"})
      */
     private $image;
 
