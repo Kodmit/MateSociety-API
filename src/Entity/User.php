@@ -249,6 +249,11 @@ class User implements UserInterface
      */
     public $tox_id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\GroupEvent", mappedBy="creator")
+     */
+    private $events;
+
 
     public function __construct()
     {
@@ -263,6 +268,7 @@ class User implements UserInterface
         $this->groupFeedComments = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->joinRequests = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId()
@@ -643,6 +649,37 @@ class User implements UserInterface
     public function setToxId(?string $tox_id): self
     {
         $this->tox_id = $tox_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            // set the owning side to null (unless already changed)
+            if ($event->getCreator() === $this) {
+                $event->setCreator(null);
+            }
+        }
 
         return $this;
     }

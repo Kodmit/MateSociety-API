@@ -60,11 +60,11 @@ class Group
     public $created_at;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"}    )
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"read_group"})
      */
-    private $creator;
+    public $creator;
 
     /**
      * @ORM\Column(type="text")
@@ -127,6 +127,13 @@ class Group
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\GroupEvent", mappedBy="_group", orphanRemoval=true)
+     * todo : Add is_member normalizer
+     * @Groups({"read_group"})
+     */
+    private $groupEvents;
+
     public function __construct()
     {
         $this->groupFeeds = new ArrayCollection();
@@ -135,6 +142,7 @@ class Group
         $this->joinRequests = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->users = new ArrayCollection();
+        $this->groupEvents = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -378,6 +386,37 @@ class Group
             // set the owning side to null (unless already changed)
             if ($user->getGroupMember() === $this) {
                 $user->setGroupMember(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupEvent[]
+     */
+    public function getGroupEvents(): Collection
+    {
+        return $this->groupEvents;
+    }
+
+    public function addGroupEvent(GroupEvent $groupEvent): self
+    {
+        if (!$this->groupEvents->contains($groupEvent)) {
+            $this->groupEvents[] = $groupEvent;
+            $groupEvent->setGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupEvent(GroupEvent $groupEvent): self
+    {
+        if ($this->groupEvents->contains($groupEvent)) {
+            $this->groupEvents->removeElement($groupEvent);
+            // set the owning side to null (unless already changed)
+            if ($groupEvent->getGroup() === $this) {
+                $groupEvent->setGroup(null);
             }
         }
 
