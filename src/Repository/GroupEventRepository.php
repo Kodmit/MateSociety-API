@@ -7,10 +7,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Event|null find($id, $lockMode = null, $lockVersion = null)
- * @method Event|null findOneBy(array $criteria, array $orderBy = null)
- * @method Event[]    findAll()
- * @method Event[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method GroupEvent|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GroupEvent|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GroupEvent[]    findAll()
+ * @method GroupEvent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class GroupEventRepository extends ServiceEntityRepository
 {

@@ -26,65 +26,66 @@ use Doctrine\ORM\Mapping as ORM;
  *     normalizationContext={"groups"={"read_event"}},
  *     denormalizationContext={"groups"={"write_event"}}
  *     )
- * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\GroupEventRepository")
  * @ORM\Table(name="group_events")
  */
 class GroupEvent
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=150)
-     * @Groups({"is_member:group_info", "write_event", "read_group"})
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"is_member:group_info", "write_event"})
+     * @Groups({"is_member:group_event", "write_event"})
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"is_member:group_info", "read_event"})
+     * @Groups({"is_member:group_event", "read_event"})
      */
     private $creator;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"is_member:group_info"})
+     * @Groups({"is_member:group_event"})
      */
     public $_group;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"is_member:group_info"})
+     * @Groups({"is_member:group_event"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"is_member:group_info", "write_event", "read_group"})
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
     public $event_start;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"is_member:group_info", "write_event", "read_group"})
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
     public $event_end;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"is_member:group_info", "write_event", "read_group"})
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
     private $place;
 
@@ -93,7 +94,7 @@ class GroupEvent
         $this->created_at = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -115,7 +115,7 @@ class User implements UserInterface
      *      min = 2,
      *      max = 50
      * )
-     * @Groups({"read_user", "write_user", "read_group", "read_request"})
+     * @Groups({"read_user", "write_user", "read_group", "read_request", "read_event"})
      */
     private $username;
 
