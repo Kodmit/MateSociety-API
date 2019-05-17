@@ -654,14 +654,14 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|GroupEvent[]
      */
     public function getEvents(): Collection
     {
         return $this->events;
     }
 
-    public function addEvent(Event $event): self
+    public function addEvent(GroupEvent $event): self
     {
         if (!$this->events->contains($event)) {
             $this->events[] = $event;
@@ -671,7 +671,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeEvent(Event $event): self
+    public function removeEvent(GroupEvent $event): self
     {
         if ($this->events->contains($event)) {
             $this->events->removeElement($event);

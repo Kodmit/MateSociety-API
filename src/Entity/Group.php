@@ -18,7 +18,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 /**
  * @ApiResource(
  *     attributes={
- *          "access_control"="is_granted('ROLE_USER')"
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "pagination_items_per_page"=10
  *      },
  *     collectionOperations={
  *         "get",

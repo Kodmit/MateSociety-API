@@ -10,7 +10,7 @@ doctrine:
         types:
             uuid:  Ramsey\Uuid\Doctrine\UuidType
         # configure these for your database server
-        driver: 'pdo_pgsql'
+        driver: 'pdo_mysql'
         server_version: '10.7'
         charset: utf8
         default_table_options:

@@ -8,10 +8,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class CountryFixtures extends Fixture
 {
+
+    // Load order : 1
+
     public function load(ObjectManager $manager)
     {
         $countries = ["France", "Belgique", "Suisse"];
-        $a = 0;
+        $a = 1;
         foreach ($countries as $country){
             $orm = new Country();
             $orm->setName($country);
