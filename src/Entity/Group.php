@@ -19,7 +19,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  * @ApiResource(
  *     attributes={
  *          "access_control"="is_granted('ROLE_USER')",
- *          "pagination_items_per_page"=10
+ *          "pagination_items_per_page"=6
  *      },
  *     collectionOperations={
  *         "get",
@@ -33,7 +33,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  *     normalizationContext={"groups"={"read_group"}},
  *     denormalizationContext={"groups"={"write_group"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial", "city": "exact", "description": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "city": "partial", "description": "partial"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity("name")
  * @ORM\Table(name="groups")

@@ -35,5 +35,10 @@ services:
         arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
         autoconfigure: false
 
+    'App\Filter\GroupSearchFilter':
+        class: 'App\Filter\GroupSearchFilter'
+        autowire: true
+        tags: [ { name: 'api_platform.filter', id: 'search' } ]
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
