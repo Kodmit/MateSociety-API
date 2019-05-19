@@ -41,7 +41,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setCountry($france);
         $password = $this->userPasswordEncoder->encodePassword($admin, "admin");
         $admin->setPassword($password);
-        $admin->setDepartment($this->getReference('fr_department_' . 60));
+        $admin->setDepartment($this->getReference('fr_department_FR-60'));
         $admin->setEnabled(true);
         $admin->setRoles(["ROLE_USER", "ROLE_ADMIN"]);
         $admin->eraseCredentials();
@@ -56,12 +56,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail($faker->email);
             $user->setDescription($faker->text);
             if(rand(0,10) < 3) {
-                $be = ["VAN", "VLI", "VOV", "WHT", "WLG"];
-                $user->setDepartment($this->getReference('be_department_' . $be(array_rand($be))));
+                $be = ["BE-VAN", "BE-VLI", "BE-VOV", "BE-WHT", "BE-WLG"];
+                $user->setDepartment($this->getReference('be_department_' . $be[array_rand($be)]));
                 $user->setCountry($belgium);
             }
             else{
-                $user->setDepartment($this->getReference('fr_department_' . rand(30, 60)));
+                $user->setDepartment($this->getReference('fr_department_FR-' . rand(30, 60)));
                 $user->setCountry($france);
             }
             $password = $this->userPasswordEncoder->encodePassword($user, "password");

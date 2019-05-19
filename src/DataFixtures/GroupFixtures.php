@@ -20,11 +20,11 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             $group->setCountry($this->getReference('country_' . rand(1, 3)));
             $group->setCreator($this->getReference('user_' . $i));
             if(rand(0,10) > 4){
-                $group->setDepartment($this->getReference('fr_department' . rand(30, 60)));
+                $group->setDepartment($this->getReference('fr_department_FR-' . rand(30, 60)));
             }
             else{
                 $be = ["VAN", "VLI", "VOV", "WHT", "WLG"];
-                $group->setDepartment($this->getReference('be_department_' . $be(array_rand($be))));
+                $group->setDepartment($this->getReference('be_department_BE-' . $be[array_rand($be)]));
             }
             $group->addUser($this->getReference('user_' . $i));
             for ($j = 0; $j < rand(1, 10); $j++) {
