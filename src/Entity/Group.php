@@ -124,7 +124,7 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="group_member")
-     * @Groups({"is_creator:group", "is_admin"})
+     * @Groups({"read_group"})
      */
     private $users;
 
@@ -134,6 +134,12 @@ class Group
      * @Groups({"read_group"})
      */
     private $groupEvents;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="_groups")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $department;
 
     public function __construct()
     {
@@ -420,6 +426,18 @@ class Group
                 $groupEvent->setGroup(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDepartment(): ?Department
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(?Department $department): self
+    {
+        $this->department = $department;
 
         return $this;
     }

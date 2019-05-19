@@ -49,11 +49,17 @@ class Country
      */
     private $groups;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Department", mappedBy="country")
+     */
+    private $departments;
+
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->departments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +135,37 @@ class Country
             // set the owning side to null (unless already changed)
             if ($group->getCountry() === $this) {
                 $group->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Department[]
+     */
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function addDepartment(Department $department): self
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments[] = $department;
+            $department->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepartment(Department $department): self
+    {
+        if ($this->departments->contains($department)) {
+            $this->departments->removeElement($department);
+            // set the owning side to null (unless already changed)
+            if ($department->getCountry() === $this) {
+                $department->setCountry(null);
             }
         }
 

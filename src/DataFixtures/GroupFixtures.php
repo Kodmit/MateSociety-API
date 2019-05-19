@@ -15,10 +15,18 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $group = new Group();
             $group->setCountry($this->getReference('country_' . rand(1, 3)));
             $group->setCreator($this->getReference('user_' . $i));
+            if(rand(0,10) > 4){
+                $group->setDepartment($this->getReference('fr_department' . rand(30, 60)));
+            }
+            else{
+                $be = ["VAN", "VLI", "VOV", "WHT", "WLG"];
+                $group->setDepartment($this->getReference('be_department_' . $be(array_rand($be))));
+            }
+            $group->addUser($this->getReference('user_' . $i));
             for ($j = 0; $j < rand(1, 10); $j++) {
                 $group->addUser($this->getReference('user_' . $j));
             }
@@ -33,7 +41,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
     }
 
 
-    // Load order : 3
+    // Load order : 4
     public function getDependencies()
     {
         return [

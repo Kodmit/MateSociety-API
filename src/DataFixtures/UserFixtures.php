@@ -41,23 +41,29 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setCountry($france);
         $password = $this->userPasswordEncoder->encodePassword($admin, "admin");
         $admin->setPassword($password);
+        $admin->setDepartment($this->getReference('fr_department_' . 60));
         $admin->setEnabled(true);
         $admin->setRoles(["ROLE_USER", "ROLE_ADMIN"]);
         $admin->eraseCredentials();
         $manager->persist($admin);
 
         // Creating users
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             $user = new User();
             $user->setUsername($faker->userName);
             $user->setBirthday($faker->dateTimeBetween());
             $user->setCity($faker->city);
             $user->setEmail($faker->email);
             $user->setDescription($faker->text);
-            if(rand(0,10) < 3)
+            if(rand(0,10) < 3) {
+                $be = ["VAN", "VLI", "VOV", "WHT", "WLG"];
+                $user->setDepartment($this->getReference('be_department_' . $be(array_rand($be))));
                 $user->setCountry($belgium);
-            else
+            }
+            else{
+                $user->setDepartment($this->getReference('fr_department_' . rand(30, 60)));
                 $user->setCountry($france);
+            }
             $password = $this->userPasswordEncoder->encodePassword($user, "password");
             $user->setPassword($password);
             $user->setEnabled(true);
@@ -71,11 +77,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    // Load order : 2
+    // Load order : 3
     public function getDependencies()
     {
         return [
-            CountryFixtures::class
+            CountryFixtures::class,
+            DepartmentFixtures::class
         ];
     }
 }
