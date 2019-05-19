@@ -25,15 +25,9 @@ class Department
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=20)
      */
-    private $code;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=200)
@@ -62,19 +56,14 @@ class Department
         $this->_groups = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function getCode(): ?string
+    public function setId(string $code): self
     {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
+        $this->id = $code;
 
         return $this;
     }

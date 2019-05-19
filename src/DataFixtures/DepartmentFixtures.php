@@ -114,7 +114,7 @@ class DepartmentFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($franceDepts as $key => $value){
             $franceDept = new Department();
-            $franceDept->setCode($key);
+            $franceDept->setId($key);
             $franceDept->setName($value);
             $franceDept->setCountry($this->getReference('country_1'));
 
@@ -139,7 +139,7 @@ class DepartmentFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($belgiumDepts as $key => $value){
             $belgiumDept = new Department();
-            $belgiumDept->setCode($key);
+            $belgiumDept->setId($key);
             $belgiumDept->setName($value);
             $belgiumDept->setCountry($this->getReference('country_2'));
 
@@ -180,7 +180,7 @@ class DepartmentFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($switzerlandDepts as $key => $value){
             $switzerlandDept = new Department();
-            $switzerlandDept->setCode($key);
+            $switzerlandDept->setId($key);
             $switzerlandDept->setName($value);
             $switzerlandDept->setCountry($this->getReference('country_3'));
 

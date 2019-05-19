@@ -27,7 +27,8 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
                 $group->setDepartment($this->getReference('be_department_BE-' . $be[array_rand($be)]));
             }
             $group->addUser($this->getReference('user_' . $i));
-            for ($j = 0; $j < rand(1, 10); $j++) {
+            $rand_j = rand(22, 30);
+            for ($j = 21; $j < $rand_j; $j++) {
                 $group->addUser($this->getReference('user_' . $j));
             }
             $group->setCity($faker->city);

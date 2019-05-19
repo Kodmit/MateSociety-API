@@ -33,7 +33,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  *     normalizationContext={"groups"={"read_group"}},
  *     denormalizationContext={"groups"={"write_group"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial", "city": "partial", "description": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "department": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity("name")
  * @ORM\Table(name="groups")
