@@ -138,6 +138,7 @@ class Group
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="_groups")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_group"})
      */
     private $department;
 

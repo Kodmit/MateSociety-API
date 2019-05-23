@@ -6,7 +6,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get"
+ *     },
+ *     itemOperations={
+ *         "get"
+ *     },
+ *     normalizationContext={"groups"={"read_group_goal"}},
+ *     denormalizationContext={"groups"={"write_group_goal"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\GroupGoalRepository")
  * @ORM\Table(name="group_goals")
  */
@@ -39,6 +48,12 @@ class GroupGoal
      * @ORM\Column(type="datetime")
      */
     private $created_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Icon", inversedBy="groupGoal")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $icon;
 
     public function __construct()
     {
@@ -94,6 +109,18 @@ class GroupGoal
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getIcon(): ?Icon
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?Icon $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }
