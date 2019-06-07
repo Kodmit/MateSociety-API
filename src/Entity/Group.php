@@ -111,7 +111,8 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupGoal", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator:group", "is_admin"})
+     * @Groups({"read_group"})
+     * @ApiSubresource
      */
     private $groupGoals;
 
@@ -132,6 +133,7 @@ class Group
      * @ORM\OneToMany(targetEntity="App\Entity\GroupEvent", mappedBy="_group", orphanRemoval=true)
      * todo : Add is_member normalizer
      * @Groups({"read_group"})
+     * @ApiSubresource
      */
     private $groupEvents;
 

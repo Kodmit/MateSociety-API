@@ -35,7 +35,12 @@ class IconFixtures extends Fixture
             'Marche' => 'walking',
             'Jeux' => 'dice',
             'Voyages' => 'plane',
-            'Musique' => 'guitar'
+            'Musique' => 'guitar',
+            'Tir à l\'arc' => 'bullseye-arrow',
+            'Tir' => 'crosshairs',
+            'Moto' => 'motorcycle',
+            'Ping Pong' => 'table-tennis',
+            'Autre' => 'chevron-circle-down'
         ];
 
         foreach ($icons as $key => $value){

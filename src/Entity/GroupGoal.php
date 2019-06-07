@@ -1,17 +1,24 @@
 <?php
-
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+// todo : Config all this shit
 /**
  * @ApiResource(
+ *     attributes={
+ *         "access_control"="is_granted('ROLE_USER')"
+ *     },
  *     collectionOperations={
- *         "get"
+ *         "get",
+ *         "post"
  *     },
  *     itemOperations={
- *         "get"
+ *         "get",
+ *         "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *         "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
  *     },
  *     normalizationContext={"groups"={"read_group_goal"}},
  *     denormalizationContext={"groups"={"write_group_goal"}}
@@ -31,29 +38,40 @@ class GroupGoal
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="groupGoals")
      * @ORM\JoinColumn(nullable=false)
+     * @ApiSubresource
      */
     private $_group;
 
     /**
      * @ORM\Column(type="string", length=200)
+     * @Groups({"read_group_goal", "write_group_goal", "read_group"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read_group_goal", "write_group_goal", "read_group"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_group_goal"})
      */
     private $created_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Icon", inversedBy="groupGoal")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_group_goal", "write_group_goal", "read_group"})
      */
     private $icon;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    public $creator;
 
     public function __construct()
     {
@@ -121,6 +139,18 @@ class GroupGoal
     public function setIcon(?Icon $icon): self
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

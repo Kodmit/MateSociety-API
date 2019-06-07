@@ -56,7 +56,7 @@ class GroupEvent
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"is_member:group_event", "read_event"})
      */
-    private $creator;
+    public $creator;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="groupEvents")

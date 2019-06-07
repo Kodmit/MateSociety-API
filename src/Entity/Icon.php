@@ -28,24 +28,25 @@ class Icon
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"read_icon", "read_group_goal"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({'read_icon', 'read_group_goal'})
+     * @Groups({"read_icon", "read_group_goal"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({'read_icon', 'read_group_goal'})
+     * @Groups({"read_icon", "read_group_goal", "read_group"})
      */
     private $path;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupGoal", mappedBy="icon")
-     * @Groups({'read_icon'})
+     * @Groups({"read_icon"})
      */
     private $groupGoal;
 
