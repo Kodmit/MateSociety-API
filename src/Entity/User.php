@@ -260,6 +260,11 @@ class User implements UserInterface
      */
     private $department;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ImageObject", mappedBy="creator")
+     */
+    private $imageObjects;
+
 
     public function __construct()
     {
@@ -275,6 +280,7 @@ class User implements UserInterface
         $this->reports = new ArrayCollection();
         $this->joinRequests = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->imageObjects = new ArrayCollection();
     }
 
     public function getId()
@@ -698,6 +704,37 @@ class User implements UserInterface
     public function setDepartment(?Department $department): self
     {
         $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImageObject[]
+     */
+    public function getImageObjects(): Collection
+    {
+        return $this->imageObjects;
+    }
+
+    public function addImageObject(ImageObject $imageObject): self
+    {
+        if (!$this->imageObjects->contains($imageObject)) {
+            $this->imageObjects[] = $imageObject;
+            $imageObject->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImageObject(ImageObject $imageObject): self
+    {
+        if ($this->imageObjects->contains($imageObject)) {
+            $this->imageObjects->removeElement($imageObject);
+            // set the owning side to null (unless already changed)
+            if ($imageObject->getCreator() === $this) {
+                $imageObject->setCreator(null);
+            }
+        }
 
         return $this;
     }

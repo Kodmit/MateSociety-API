@@ -70,11 +70,18 @@ class GroupFeed
      */
     private $groupFeedComments;
 
+    /**
+     * @Groups({"read_feed"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ImageObject", mappedBy="group_feed")
+     */
+    private $imageObjects;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->likes = 0;
         $this->groupFeedComments = new ArrayCollection();
+        $this->imageObjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,6 +174,37 @@ class GroupFeed
             // set the owning side to null (unless already changed)
             if ($groupFeedComment->getGroupFeed() === $this) {
                 $groupFeedComment->setGroupFeed(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImageObject[]
+     */
+    public function getImageObjects(): Collection
+    {
+        return $this->imageObjects;
+    }
+
+    public function addImageObject(ImageObject $imageObject): self
+    {
+        if (!$this->imageObjects->contains($imageObject)) {
+            $this->imageObjects[] = $imageObject;
+            $imageObject->setGroupFeed($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImageObject(ImageObject $imageObject): self
+    {
+        if ($this->imageObjects->contains($imageObject)) {
+            $this->imageObjects->removeElement($imageObject);
+            // set the owning side to null (unless already changed)
+            if ($imageObject->getGroupFeed() === $this) {
+                $imageObject->setGroupFeed(null);
             }
         }
 
