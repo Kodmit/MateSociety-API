@@ -2,18 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ApiResource(
  *     attributes={
  *          "access_control"="is_granted('ROLE_USER')",
  *          "normalization_context"={"groups"={"read_feed"}},
- *          "denormalization_context"={"groups"={"write_feed"}}
+ *          "denormalization_context"={"groups"={"write_feed"}},
+ *          "pagination_items_per_page"=5,
+ *          "order"={"created_at": "DESC"}
  *      },
  *     collectionOperations={
  *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
@@ -47,26 +49,31 @@ class GroupFeed
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="groupFeeds")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_feed"})
      */
     private $creator;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"read_feed", "write_feed"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_feed"})
      */
-    private $created_at;
+    public $created_at;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read_feed"})
      */
     private $likes;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeedComment", mappedBy="group_feed", orphanRemoval=true)
+     * @Groups({"read_feed"})
      */
     private $groupFeedComments;
 

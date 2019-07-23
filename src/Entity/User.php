@@ -115,7 +115,7 @@ class User implements UserInterface
      *      min = 2,
      *      max = 50
      * )
-     * @Groups({"read_user", "write_user", "read_group", "read_request", "read_event"})
+     * @Groups({"read_user", "write_user", "read_group", "read_request", "read_event", "read_feed"})
      */
     private $username;
 
@@ -233,7 +233,7 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=MediaObject::class)
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"write_user", "read_user", "read_group"})
+     * @Groups({"write_user", "read_user", "read_group", "read_feed"})
      */
     private $image;
 

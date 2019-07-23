@@ -1,9 +1,15 @@
 <?php
+/*
+ * Current User Subscriber
+ *
+ * This subscriber link the current user object or group to assigned entities fields.
+ */
 
 namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\GroupEvent;
+use App\Entity\GroupFeed;
 use App\Entity\GroupGoal;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -74,6 +80,13 @@ class CurrentUserSubscriber implements EventSubscriberInterface
 
                 /** @var GroupGoal $object */
                 $object->setGroup($user->getOwnedGroup());
+                $this->manager->flush();
+            }
+
+            // Set the user group to a GroupFeed post
+            if(get_class($object) == "App\\Entity\\GroupFeed"){
+                /** @var GroupFeed $object */
+                $object->setGroup($user->getGroupMember());
                 $this->manager->flush();
             }
         }

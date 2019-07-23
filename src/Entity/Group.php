@@ -98,7 +98,8 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="_group", orphanRemoval=true)
-     * @Groups({"is_creator:group", "is_admin"})
+     * @ApiSubresource
+     * @Groups({"read_group", "is_admin"})
      */
     private $groupFeeds;
 

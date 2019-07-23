@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -38,13 +39,13 @@ class ImageObject
 
     /**
      * @Groups({"read_image", "write_image"})
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $by_default;
 
     /**
      * @Groups({"read_image", "write_image"})
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
     private $highlight;
 
@@ -84,7 +85,7 @@ class ImageObject
         $this->created_at = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
