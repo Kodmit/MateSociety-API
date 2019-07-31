@@ -1,5 +1,6 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+
     encoders:
         App\Entity\User: bcrypt
 
@@ -15,6 +16,11 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     firewalls:
+        refresh:
+            pattern:  ^/api/token/refresh
+            stateless: true
+            anonymous: true
+
         login:
             pattern:  ^/api/login
             stateless: true
@@ -41,6 +47,7 @@ security:
             security: false
 
     access_control:
+    - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/.*, roles: IS_AUTHENTICATED_FULLY, allow_if: "'127.0.0.1' == request.getClientIp()" }
     - { path: ^/admin/.*, roles: IS_AUTHENTICATED_FULLY, allow_if: "'127.0.0.1' == request.getClientIp()" }
     - { path: ^/api$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

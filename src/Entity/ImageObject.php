@@ -50,16 +50,16 @@ class ImageObject
     private $highlight;
 
     /**
-     * @Groups({"read_image", "write_image"})
+     * @Groups({"read_image", "write_image", "read_feed"})
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $caption;
 
     /**
-     * @Groups({"read_image", "write_image"})
+     * @Groups({"read_image", "write_image", "read_feed"})
      * @ORM\Column(type="text")
      */
-    private $path;
+    private $imageUrl;
 
     /**
      * @Groups({"read_image"})
@@ -114,26 +114,27 @@ class ImageObject
         return $this;
     }
 
-    public function getName(): ?string
+    public function getCaption(): ?string
     {
-        return $this->name;
+        return $this->caption;
     }
 
-    public function setName(string $name): self
+    public function setCaption(string $caption): self
     {
-        $this->name = $name;
+        $this->caption = $caption;
 
         return $this;
     }
 
-    public function getPath(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->path;
+        return $this->imageUrl;
     }
 
-    public function setPath(string $path): self
+    public function setImageUrl(string $imageUrl): self
     {
-        $this->path = $path;
+        $this->imageUrl = $imageUrl;
+
 
         return $this;
     }
