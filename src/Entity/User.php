@@ -204,6 +204,8 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeed", mappedBy="creator")
+     * @ApiSubresource
+     * @Groups({"read_user"})
      */
     private $groupFeeds;
 

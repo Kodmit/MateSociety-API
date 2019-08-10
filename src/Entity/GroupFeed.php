@@ -22,6 +22,24 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *         "post"
  *     },
  *     itemOperations={
+ *           "like"={
+ *              "denormalization_context"={"groups"={"write_like"}},
+ *              "controller"=App\Controller\GroupFeedLike::class,
+ *              "path"="/group_feeds/{id}/like",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Add or remove a like on GroupFeed post.",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "id",
+ *                          "in" = "path",
+ *                          "description" = "GroupFeed ID.",
+ *                          "required" = "true",
+ *                          "type" : "integer",
+ *                      }
+ *                  }
+ *               }
+ *          },
  *          "get"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
  *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
  *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
@@ -66,10 +84,10 @@ class GroupFeed
     public $created_at;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Groups({"read_feed"})
+     * @ORM\Column(type="array")
+     * @Groups({"write_like", "read_feed"})
      */
-    private $likes;
+    private $likes = [];
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupFeedComment", mappedBy="group_feed", orphanRemoval=true)
@@ -86,7 +104,6 @@ class GroupFeed
     public function __construct()
     {
         $this->created_at = new \DateTime();
-        $this->likes = 0;
         $this->groupFeedComments = new ArrayCollection();
         $this->imageObjects = new ArrayCollection();
     }
@@ -144,12 +161,12 @@ class GroupFeed
         return $this;
     }
 
-    public function getLikes(): ?int
+    public function getLikes(): ?array
     {
         return $this->likes;
     }
 
-    public function setLikes(int $likes): self
+    public function setLikes(array $likes): self
     {
         $this->likes = $likes;
 
