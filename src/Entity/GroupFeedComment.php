@@ -4,9 +4,27 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * attributes={
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "normalization_context"={"groups"={"read_feedComment"}},
+ *          "denormalization_context"={"groups"={"write_feedComment"}},
+ *          "pagination_items_per_page"=5,
+ *          "order"={"created_at": "DESC"}
+ *      },
+ *     collectionOperations={
+ *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
+ *         "post"
+ *     },
+ *     itemOperations={
+ *          "get"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"},
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\GroupFeedCommentRepository")
  * @ORM\Table(name="group_feed_comments")
  */
@@ -28,16 +46,19 @@ class GroupFeedComment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\GroupFeed", inversedBy="groupFeedComments")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"write_feedComment"})
      */
     private $group_feed;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read_feed"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"write_feedComment", "read_feed"})
      */
     private $content;
 

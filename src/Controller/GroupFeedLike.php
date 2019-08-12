@@ -25,13 +25,11 @@ class GroupFeedLike
         $likes = $data->getLikes();
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $liked = array_search($user->getId(), $likes);
-
-        if($liked) {
-
+        if (($key = array_search($user->getId(), $likes)) !== false) {
+            unset($likes[$key]);
         }
         else {
-            array_push($likes, [$user->getId()]);
+            array_push($likes, $user->getId());
         }
 
         $data->setLikes($likes);
