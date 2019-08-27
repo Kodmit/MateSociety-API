@@ -145,6 +145,11 @@ class Group
      */
     private $department;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="groupsMember")
+     */
+    private $userList;
+
     public function __construct()
     {
         $this->groupFeeds = new ArrayCollection();
@@ -154,6 +159,7 @@ class Group
         $this->created_at = new \DateTime();
         $this->users = new ArrayCollection();
         $this->groupEvents = new ArrayCollection();
+        $this->userList = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -442,6 +448,34 @@ class Group
     public function setDepartment(?Department $department): self
     {
         $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUserList(): Collection
+    {
+        return $this->userList;
+    }
+
+    public function addUserList(User $userList): self
+    {
+        if (!$this->userList->contains($userList)) {
+            $this->userList[] = $userList;
+            $userList->addGroupsMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserList(User $userList): self
+    {
+        if ($this->userList->contains($userList)) {
+            $this->userList->removeElement($userList);
+            $userList->removeGroupsMember($this);
+        }
 
         return $this;
     }

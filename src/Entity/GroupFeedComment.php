@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "access_control"="is_granted('ROLE_USER')",
  *          "normalization_context"={"groups"={"read_feedComment"}},
  *          "denormalization_context"={"groups"={"write_feedComment"}},
- *          "pagination_items_per_page"=5,
+ *          "pagination_items_per_page"=2,
  *          "order"={"created_at": "DESC"}
  *      },
  *     collectionOperations={
@@ -40,6 +40,7 @@ class GroupFeedComment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="groupFeedComments")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read_feedComment", "read_feed"})
      */
     private $creator;
 
@@ -48,17 +49,17 @@ class GroupFeedComment
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"write_feedComment"})
      */
-    private $group_feed;
+    public $group_feed;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_feed"})
+     * @Groups({"read_feedComment", "read_feed"})
      */
-    private $created_at;
+    public $created_at;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"write_feedComment", "read_feed"})
+     * @Groups({"read_feedComment", "write_feedComment", "read_feed"})
      */
     private $content;
 

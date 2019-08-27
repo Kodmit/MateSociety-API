@@ -116,7 +116,7 @@ class User implements UserInterface
      *      min = 2,
      *      max = 50
      * )
-     * @Groups({"read_user", "write_user", "read_group", "read_request", "read_event", "read_feed"})
+     * @Groups({"read_user", "write_user", "read_group", "read_request", "read_event", "read_feed", "read_feedComment"})
      */
     private $username;
 
@@ -237,7 +237,7 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=MediaObject::class)
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"write_user", "read_user", "read_group", "read_feed"})
+     * @Groups({"write_user", "read_user", "read_group", "read_feed", "read_feedComment"})
      */
     private $image;
 
@@ -269,6 +269,11 @@ class User implements UserInterface
      */
     private $imageObjects;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="userList")
+     */
+    private $groupsMember;
+
 
     public function __construct()
     {
@@ -285,6 +290,7 @@ class User implements UserInterface
         $this->joinRequests = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->imageObjects = new ArrayCollection();
+        $this->groupsMember = new ArrayCollection();
     }
 
     public function getId()
@@ -738,6 +744,32 @@ class User implements UserInterface
             if ($imageObject->getCreator() === $this) {
                 $imageObject->setCreator(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroupsMember(): Collection
+    {
+        return $this->groupsMember;
+    }
+
+    public function addGroupsMember(Group $groupsMember): self
+    {
+        if (!$this->groupsMember->contains($groupsMember)) {
+            $this->groupsMember[] = $groupsMember;
+        }
+
+        return $this;
+    }
+
+    public function removeGroupsMember(Group $groupsMember): self
+    {
+        if ($this->groupsMember->contains($groupsMember)) {
+            $this->groupsMember->removeElement($groupsMember);
         }
 
         return $this;

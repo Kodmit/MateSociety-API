@@ -43,7 +43,7 @@ class GroupEvent
      * @ORM\Column(type="string", length=150)
      * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -72,22 +72,40 @@ class GroupEvent
     private $created_at;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
-    public $event_start;
+    public $start;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
-    public $event_end;
+    public $end;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"is_member:group_event", "write_event", "read_group"})
      */
     private $place;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
+     */
+    private $rrule;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
+     */
+    private $allDay;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     * @Groups({"is_member:group_event", "write_event", "read_group"})
+     */
+    private $duration;
 
     public function __construct()
     {
@@ -99,14 +117,14 @@ class GroupEvent
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -159,26 +177,26 @@ class GroupEvent
         return $this;
     }
 
-    public function getEventStart(): ?\DateTimeInterface
+    public function getStart(): ?\DateTimeInterface
     {
-        return $this->event_start;
+        return $this->start;
     }
 
-    public function setEventStart(\DateTimeInterface $event_start): self
+    public function setStart(\DateTimeInterface $start): self
     {
-        $this->event_start = $event_start;
+        $this->start = $start;
 
         return $this;
     }
 
-    public function getEventEnd(): ?\DateTimeInterface
+    public function getEnd(): ?\DateTimeInterface
     {
-        return $this->event_end;
+        return $this->end;
     }
 
-    public function setEventEnd(?\DateTimeInterface $event_end): self
+    public function setEnd(?\DateTimeInterface $end): self
     {
-        $this->event_end = $event_end;
+        $this->end = $end;
 
         return $this;
     }
@@ -191,6 +209,42 @@ class GroupEvent
     public function setPlace(?string $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getRrule()
+    {
+        return $this->rrule;
+    }
+
+    public function setRrule($rrule): self
+    {
+        $this->rrule = $rrule;
+
+        return $this;
+    }
+
+    public function getAllDay(): ?bool
+    {
+        return $this->allDay;
+    }
+
+    public function setAllDay(?bool $allDay): self
+    {
+        $this->allDay = $allDay;
+
+        return $this;
+    }
+
+    public function getDuration(): ?string
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?string $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }
