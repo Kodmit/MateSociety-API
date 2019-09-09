@@ -54,7 +54,7 @@ class CurrentUserSubscriber implements EventSubscriberInterface
 
                     // Set the user to the Group if he create it
                     if(get_class($object) == "App\\Entity\\Group"){
-                        $user->setGroupMember($object);
+                        $user->addGroupsMember($object);
                         $this->manager->flush();
                     }
 

@@ -20,18 +20,11 @@ class CheckUserGroup
         $this->request = $request;
     }
 
-    public function __invoke(User $data): User
+    public function __invoke(User $data)
     {
-        $token = $this->request->getCurrentRequest()->attributes->get("token");
-
-        if($token != $data->getToken()){
-            throw new \ErrorException("Bad token");
+        if($data->getGroupsMember()) {
+            return $data->getGroupsMember();
         }
-        else{
-            $data->setEnabled(true);
-            $this->objectManager->flush();
-        }
-
-        return $data;
+        return false;
     }
 }

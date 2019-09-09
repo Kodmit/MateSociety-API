@@ -53,8 +53,10 @@ class GroupInfoAttributeNormalizer implements ContextAwareNormalizerInterface, N
         /** @var User $user */
 
         $user = $this->tokenStorage->getToken()->getUser();
-        if($object->getGroup() === $user->getGroupMember())
-            return true;
+        foreach ($user->getGroupsMember() as $group) {
+            if($object->getGroup() === $group)
+                return true;
+        }
         return false;
     }
 }

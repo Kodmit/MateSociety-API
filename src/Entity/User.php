@@ -29,6 +29,24 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *         "delete"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
  *         "get"={"access_control"="is_granted('ROLE_USER')"},
  *         "put"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
+ *         "check_group"={
+ *              "access_control"="is_granted('ROLE_ADMIN') or object == user",
+ *              "controller"=App\Controller\CheckUserGroup::class,
+ *              "path"="/users/{id}/check_group/",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Check if the user is in a group",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "id",
+ *                          "in" = "path",
+ *                          "description" = "User ID",
+ *                          "required" = "true",
+ *                          "type" : "string",
+ *                      }
+ *                  }
+ *               }
+ *         },
  *         "enable_user"={
  *              "denormalization_context"={"groups"={"write_enable"}},
  *              "controller"=App\Controller\EnableUser::class,
@@ -225,13 +243,6 @@ class User implements UserInterface
     private $joinRequests;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="users", cascade={"persist"})
-     * @ApiSubresource
-     * @Groups({"read_user"})
-     */
-    public $group_member;
-
-    /**
      * @var MediaObject|null
      *
      * @ORM\ManyToOne(targetEntity=MediaObject::class)
@@ -270,7 +281,9 @@ class User implements UserInterface
     private $imageObjects;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="userList")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="users")
+     * @ApiSubresource
+     * @Groups({"read_user"})
      */
     private $groupsMember;
 
@@ -620,18 +633,6 @@ class User implements UserInterface
                 $joinRequest->setCreator(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getGroupMember(): ?Group
-    {
-        return $this->group_member;
-    }
-
-    public function setGroupMember(?Group $group_member): self
-    {
-        $this->group_member = $group_member;
 
         return $this;
     }

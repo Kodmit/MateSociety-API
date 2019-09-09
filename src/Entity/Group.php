@@ -125,12 +125,6 @@ class Group
     private $joinRequests;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="group_member")
-     * @Groups({"read_group"})
-     */
-    private $users;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\GroupEvent", mappedBy="_group", orphanRemoval=true)
      * todo : Add is_member normalizer
      * @Groups({"read_group"})
@@ -148,7 +142,7 @@ class Group
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="groupsMember")
      */
-    private $userList;
+    private $users;
 
     public function __construct()
     {
@@ -379,37 +373,6 @@ class Group
     }
 
     /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setGroupMember($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
-            // set the owning side to null (unless already changed)
-            if ($user->getGroupMember() === $this) {
-                $user->setGroupMember(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|GroupEvent[]
      */
     public function getGroupEvents(): Collection
@@ -455,26 +418,26 @@ class Group
     /**
      * @return Collection|User[]
      */
-    public function getUserList(): Collection
+    public function getUsers(): Collection
     {
-        return $this->userList;
+        return $this->users;
     }
 
-    public function addUserList(User $userList): self
+    public function addUser(User $user): self
     {
-        if (!$this->userList->contains($userList)) {
-            $this->userList[] = $userList;
-            $userList->addGroupsMember($this);
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addGroupsMember($this);
         }
 
         return $this;
     }
 
-    public function removeUserList(User $userList): self
+    public function removeUser(User $user): self
     {
-        if ($this->userList->contains($userList)) {
-            $this->userList->removeElement($userList);
-            $userList->removeGroupsMember($this);
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeGroupsMember($this);
         }
 
         return $this;

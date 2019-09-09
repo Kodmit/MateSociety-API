@@ -36,7 +36,7 @@ class AnswerJoinRequest
         if($json->response == "accept"){
             $data->setStatus("accepted");
             $user = $data->getCreator();
-            $user->setGroupMember($data->getGroup());
+            $user->addGroupsMember($data->getGroup());
         }
         else{
             $data->setStatus("refused");

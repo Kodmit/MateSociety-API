@@ -33,7 +33,7 @@ class JwtSubscriber implements EventSubscriberInterface
         $user = $this->objectManager->getRepository(User::class)->findOneBy(['username' => $payload['username']]);
         $payload['id'] = $user->getId();
         $payload['image'] = $user->getImage();
-        $payload['uniqueToken'] = $user->getToken();
+        $payload['unique_token'] = $user->getToken();
 
         $event->setData($payload);
     }
