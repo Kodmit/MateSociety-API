@@ -86,8 +86,19 @@ class CurrentUserSubscriber implements EventSubscriberInterface
             // Set the user group to a GroupFeed post
             if(get_class($object) == "App\\Entity\\GroupFeed"){
                 /** @var GroupFeed $object */
-                $object->setGroup($user->getGroupMember());
-                $this->manager->flush();
+                $currentGroup = $object->getGroup();
+                $userGroups = $user->getGroupsMember();
+
+                $check = false;
+
+                foreach ($userGroups as $userGroup) {
+                    if ($userGroup == $currentGroup) {
+                        $check = true;
+                    }
+                }
+
+                if (!$check)
+                    throw new AccessDeniedException("You can't post in this group !");
             }
         }
 

@@ -141,6 +141,7 @@ class Group
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="groupsMember")
+     * @Groups({"read_group"})
      */
     private $users;
 

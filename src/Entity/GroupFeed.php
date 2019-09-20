@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource(
@@ -45,6 +47,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *          "delete"={"access_control"="is_granted('ROLE_ADMIN') or object.creator == user"}
  *     }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"public": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupFeedRepository")
  * @ORM\Table(name="group_feeds")
  */
@@ -62,7 +65,7 @@ class GroupFeed
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"read_feed", "write_feed"})
      */
-    private $_group;
+    public $_group;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="groupFeeds")
@@ -100,6 +103,12 @@ class GroupFeed
      * @ORM\OneToMany(targetEntity="App\Entity\ImageObject", mappedBy="group_feed")
      */
     private $imageObjects;
+
+    /**
+     * @Groups({"read_feed", "write_feed"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $public;
 
     public function __construct()
     {
@@ -231,6 +240,18 @@ class GroupFeed
                 $imageObject->setGroupFeed(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPublic(): ?bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(?bool $public): self
+    {
+        $this->public = $public;
 
         return $this;
     }

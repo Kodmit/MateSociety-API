@@ -173,7 +173,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read_user", "read_request"})
+     * @Groups({"read_user", "read_request", "read_group"})
      */
     public $created_at;
 
