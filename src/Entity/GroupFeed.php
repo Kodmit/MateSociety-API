@@ -21,13 +21,33 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      },
  *     collectionOperations={
  *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
- *         "post"
+ *         "post",
+ *         "public_feed"={
+ *              "controller"=App\Controller\PublicFeed::class,
+ *              "path"="/public_group_feeds",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Get the public feeds based on GroupInterests",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "interests",
+ *                          "in" = "path",
+ *                          "description" = "List of GroupInterests IDs",
+ *                          "required" = "false",
+ *                          "type" : "array",
+ *                          "items" : {
+ *                              "type" : "integer"
+ *                          }
+ *                      }
+ *                  }
+ *               }
+ *          },
  *     },
  *     itemOperations={
  *           "like"={
  *              "denormalization_context"={"groups"={"write_like"}},
  *              "controller"=App\Controller\GroupFeedLike::class,
- *              "path"="/group_feeds/{id}/like",
+ *              "path"="/group_feeds_like/{id}",
  *              "method"="GET",
  *              "swagger_context" = {
  *                  "summary" = "Add or remove a like on GroupFeed post.",

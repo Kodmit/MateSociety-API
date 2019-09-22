@@ -145,6 +145,12 @@ class Group
      */
     private $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\GroupInterest", mappedBy="msGroup")
+     * @Groups({"read_group"})
+     */
+    private $groupInterests;
+
     public function __construct()
     {
         $this->groupFeeds = new ArrayCollection();
@@ -155,6 +161,7 @@ class Group
         $this->users = new ArrayCollection();
         $this->groupEvents = new ArrayCollection();
         $this->userList = new ArrayCollection();
+        $this->groupInterests = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -439,6 +446,34 @@ class Group
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             $user->removeGroupsMember($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupInterest[]
+     */
+    public function getGroupInterests(): Collection
+    {
+        return $this->groupInterests;
+    }
+
+    public function addGroupInterest(GroupInterest $groupInterest): self
+    {
+        if (!$this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests[] = $groupInterest;
+            $groupInterest->addMsGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupInterest(GroupInterest $groupInterest): self
+    {
+        if ($this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests->removeElement($groupInterest);
+            $groupInterest->removeMsGroup($this);
         }
 
         return $this;
