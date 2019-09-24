@@ -287,6 +287,13 @@ class User implements UserInterface
      */
     private $groupsMember;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\GroupInterest", mappedBy="user")
+     * @Groups({"write_user"})
+     * @ApiSubresource
+     */
+    private $groupInterests;
+
 
     public function __construct()
     {
@@ -304,6 +311,7 @@ class User implements UserInterface
         $this->events = new ArrayCollection();
         $this->imageObjects = new ArrayCollection();
         $this->groupsMember = new ArrayCollection();
+        $this->groupInterests = new ArrayCollection();
     }
 
     public function getId()
@@ -771,6 +779,34 @@ class User implements UserInterface
     {
         if ($this->groupsMember->contains($groupsMember)) {
             $this->groupsMember->removeElement($groupsMember);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupInterest[]
+     */
+    public function getGroupInterests(): Collection
+    {
+        return $this->groupInterests;
+    }
+
+    public function addGroupInterest(GroupInterest $groupInterest): self
+    {
+        if (!$this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests[] = $groupInterest;
+            $groupInterest->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupInterest(GroupInterest $groupInterest): self
+    {
+        if ($this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests->removeElement($groupInterest);
+            $groupInterest->removeUser($this);
         }
 
         return $this;

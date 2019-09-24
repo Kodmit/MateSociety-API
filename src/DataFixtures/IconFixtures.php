@@ -24,6 +24,7 @@ class IconFixtures extends Fixture
             'Musculation' => 'dumbbell',
             'Ski' => 'skiing',
             'Badminton' => 'shuttlecock',
+            'book' => 'book-open',
             'Course' => 'running',
             'Baseball' => 'baseball',
             'Randonné' => 'hiking',
@@ -32,6 +33,7 @@ class IconFixtures extends Fixture
             'Informatique' => 'code',
             'Vélo' => 'bicycle',
             'Natation' => 'swimmer',
+            'backpack' => 'backpack',
             'Marche' => 'walking',
             'Jeux' => 'dice',
             'Voyages' => 'plane',
@@ -40,7 +42,9 @@ class IconFixtures extends Fixture
             'Tir' => 'crosshairs',
             'Moto' => 'motorcycle',
             'Ping Pong' => 'table-tennis',
-            'Autre' => 'chevron-circle-down'
+            'sunglasses' => 'sunglasses',
+            'sword' => 'sword',
+            'Autre' => 'chevron-circle-down',
         ];
 
         foreach ($icons as $key => $value){

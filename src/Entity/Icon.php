@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     attributes={
+ *         "pagination_items_per_page"=50,
+ *     },
  *     collectionOperations={
  *         "get"
  *     },
@@ -40,7 +43,7 @@ class Icon
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"read_icon", "read_group_goal", "read_group"})
+     * @Groups({"read_icon", "read_group_goal", "read_group", "read_group_interests"})
      */
     private $path;
 
@@ -50,9 +53,15 @@ class Icon
      */
     private $groupGoal;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\GroupInterest", mappedBy="icon")
+     */
+    private $groupInterests;
+
     public function __construct()
     {
         $this->groupGoal = new ArrayCollection();
+        $this->groupInterests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +118,37 @@ class Icon
             // set the owning side to null (unless already changed)
             if ($groupGoal->getIcon() === $this) {
                 $groupGoal->setIcon(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupInterest[]
+     */
+    public function getGroupInterests(): Collection
+    {
+        return $this->groupInterests;
+    }
+
+    public function addGroupInterest(GroupInterest $groupInterest): self
+    {
+        if (!$this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests[] = $groupInterest;
+            $groupInterest->setIcon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupInterest(GroupInterest $groupInterest): self
+    {
+        if ($this->groupInterests->contains($groupInterest)) {
+            $this->groupInterests->removeElement($groupInterest);
+            // set the owning side to null (unless already changed)
+            if ($groupInterest->getIcon() === $this) {
+                $groupInterest->setIcon(null);
             }
         }
 
