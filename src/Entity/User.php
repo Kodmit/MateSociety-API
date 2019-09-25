@@ -23,7 +23,43 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *     },
  *     collectionOperations={
  *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
- *         "post"
+ *         "post",
+ *         "check_username"={
+ *              "denormalization_context"={"groups"={"write_enable"}},
+ *              "controller"=App\Controller\User\CheckUsername::class,
+ *              "path"="/check_username/",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Check if the username exist",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "username",
+ *                          "in" = "path",
+ *                          "description" = "The username.",
+ *                          "required" = "true",
+ *                          "type" : "string",
+ *                      },
+ *                  }
+ *               }
+ *          },
+ *          "check_email"={
+ *              "denormalization_context"={"groups"={"write_enable"}},
+ *              "controller"=App\Controller\User\CheckEmail::class,
+ *              "path"="/check_email/",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Check if the email exist",
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "email",
+ *                          "in" = "path",
+ *                          "description" = "The email address.",
+ *                          "required" = "true",
+ *                          "type" : "string",
+ *                      },
+ *                  }
+ *               }
+ *          },
  *     },
  *     itemOperations={
  *         "delete"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},

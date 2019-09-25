@@ -38,21 +38,23 @@ class PublicFeed
         foreach ($goals as $goal) {
             /** @var GroupInterest $groupInterests */
             $groupInterests = $this->objectManager->getRepository(GroupInterest::class)->find($goal);
-            $groups = $groupInterests->getMsGroup();
 
-            foreach ($groups as $group) {
-                $groupFeeds = $group->getGroupFeeds();
-                if (count($groupFeeds) > 0) {
-                    foreach ($groupFeeds as $groupFeed) {
-                        if ($groupFeed->getPublic())
-                            array_push($data, $groupFeed);
+            if ($groupInterests) {
+                $groups = $groupInterests->getMsGroup();
+
+                foreach ($groups as $group) {
+                    $groupFeeds = $group->getGroupFeeds();
+                    if (count($groupFeeds) > 0) {
+                        foreach ($groupFeeds as $groupFeed) {
+                            if ($groupFeed->getPublic())
+                                array_push($data, $groupFeed);
+                        }
                     }
                 }
-
+                usort($data, [$this, 'cmpDate']);
+                return $data;
             }
+            return [];
         }
-
-        usort($data, [$this, 'cmpDate']);
-        return $data;
     }
 }

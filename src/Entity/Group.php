@@ -50,7 +50,7 @@ class Group
 
     /**
      * @ORM\Column(type="string", length=160, unique=true)
-     * @Groups({"read_group", "write_group", "read_request", "read_user"})
+     * @Groups({"read_group", "write_group", "read_request", "read_user", "read_feed"})
      */
     private $name;
 
