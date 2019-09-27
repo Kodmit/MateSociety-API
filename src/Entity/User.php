@@ -24,6 +24,15 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *     collectionOperations={
  *         "get"={"access_control"="is_granted('ROLE_ADMIN')"},
  *         "post",
+ *         "get_current_user"={
+ *              "denormalization_context"={"groups"={"write_enable"}},
+ *              "controller"=App\Controller\User\GetCurrentUser::class,
+ *              "path"="/get_current_user/",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Return the connected User",
+ *               }
+ *          },
  *         "check_username"={
  *              "denormalization_context"={"groups"={"write_enable"}},
  *              "controller"=App\Controller\User\CheckUsername::class,
@@ -103,7 +112,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *                          "in" = "path",
  *                          "description" = "User ID.",
  *                          "required" = "true",
- *                          "type" : "integer",
+ *                          "type" : "string",
  *                      }
  *                  }
  *               }
@@ -307,7 +316,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $department;
 
@@ -329,6 +338,12 @@ class User implements UserInterface
      * @ApiSubresource
      */
     private $groupInterests;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"write_user", "read_user"})
+     */
+    private $pictureProfile;
 
 
     public function __construct()
@@ -844,6 +859,18 @@ class User implements UserInterface
             $this->groupInterests->removeElement($groupInterest);
             $groupInterest->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getPictureProfile(): ?string
+    {
+        return $this->pictureProfile;
+    }
+
+    public function setPictureProfile(?string $pictureProfile): self
+    {
+        $this->pictureProfile = $pictureProfile;
 
         return $this;
     }
