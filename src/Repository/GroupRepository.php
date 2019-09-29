@@ -22,6 +22,16 @@ class GroupRepository extends ServiceEntityRepository
     // /**
     //  * @return Group[] Returns an array of Group objects
     //  */
+
+    public function sortByUsers() {
+        return $this->createQueryBuilder('g')
+            ->leftJoin('g.users', 'users')
+            ->groupBy('g.id')
+            ->orderBy('COUNT(users.id)', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
     /*
     public function findByExampleField($value)
     {

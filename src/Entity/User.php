@@ -317,6 +317,7 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Department", inversedBy="users")
      * @ORM\JoinColumn(nullable=true)
+     * @Groups({"write_user", "read_user"})
      */
     private $department;
 
@@ -334,7 +335,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\GroupInterest", mappedBy="user")
-     * @Groups({"write_user"})
+     * @Groups({"write_user", "read_user"})
      * @ApiSubresource
      */
     private $groupInterests;

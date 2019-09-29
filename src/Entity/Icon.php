@@ -43,7 +43,7 @@ class Icon
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"read_icon", "read_group_goal", "read_group", "read_group_interests"})
+     * @Groups({"read_icon", "read_group_goal", "read_group", "read_group_interests", "read_user", "read_group_interests"})
      */
     private $path;
 

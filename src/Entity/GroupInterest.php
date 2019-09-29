@@ -80,7 +80,7 @@ class GroupInterest
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read_group_interests", "write_group_interests", "read_group"})
+     * @Groups({"read_group_interests", "write_group_interests", "read_group", "read_user"})
      */
     private $name;
 
@@ -98,7 +98,7 @@ class GroupInterest
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Icon", inversedBy="groupInterests")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read_group_interests", "write_group_interests"})
+     * @Groups({"read_group_interests", "write_group_interests", "read_user", "read_group"})
      */
     private $icon;
 

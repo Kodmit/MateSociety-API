@@ -14,16 +14,42 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use App\Filter\MsDateFilter;
 
 /**
  * @ApiResource(
  *     attributes={
  *          "access_control"="is_granted('ROLE_USER')",
- *          "pagination_items_per_page"=6
+ *          "pagination_items_per_page"=6,
  *      },
  *     collectionOperations={
  *         "get",
- *         "post"
+ *         "post",
+*          "get_nearest_groups"={
+*              "controller"=App\Controller\Group\GetNearestGroups::class,
+*              "path"="/get_nearest_groups",
+*              "method"="GET",
+*              "swagger_context" = {
+*                  "summary" = "Return the nearest groups.",
+*               }
+*          },
+ *         "most_popular_groups"={
+ *              "controller"=App\Controller\Group\MostPopularGroups::class,
+ *              "path"="/most_popular_groups",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Return the most popular groups.",
+ *               }
+ *          },
+ *          "latest_groups"={
+ *              "controller"=App\Controller\Group\LastGroups::class,
+ *              "path"="/get_latest_groups",
+ *              "method"="GET",
+ *              "swagger_context" = {
+ *                  "summary" = "Return the last groups.",
+ *               }
+ *          },
  *     },
  *     itemOperations={
  *          "get",
@@ -33,7 +59,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  *     normalizationContext={"groups"={"read_group"}},
  *     denormalizationContext={"groups"={"write_group"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial", "department": "exact"})
+ * @ApiFilter(MsDateFilter::class)
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "department": "exact", "groupInterests": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity("name")
  * @ORM\Table(name="groups")
@@ -58,7 +85,7 @@ class Group
      * @ORM\Column(type="datetime")
      * @Groups({"read_group"})
      */
-    public $created_at;
+    public $createdAt;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"}    )
@@ -151,13 +178,19 @@ class Group
      */
     private $groupInterests;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read_group", "write_group"})
+     */
+    private $pictureProfile;
+
     public function __construct()
     {
         $this->groupFeeds = new ArrayCollection();
         $this->groupInfos = new ArrayCollection();
         $this->groupGoals = new ArrayCollection();
         $this->joinRequests = new ArrayCollection();
-        $this->created_at = new \DateTime();
+        $this->createdAt = new \DateTime();
         $this->users = new ArrayCollection();
         $this->groupEvents = new ArrayCollection();
         $this->userList = new ArrayCollection();
@@ -183,12 +216,12 @@ class Group
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -475,6 +508,18 @@ class Group
             $this->groupInterests->removeElement($groupInterest);
             $groupInterest->removeMsGroup($this);
         }
+
+        return $this;
+    }
+
+    public function getPictureProfile(): ?string
+    {
+        return $this->pictureProfile;
+    }
+
+    public function setPictureProfile(?string $pictureProfile): self
+    {
+        $this->pictureProfile = $pictureProfile;
 
         return $this;
     }

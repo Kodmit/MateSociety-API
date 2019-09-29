@@ -11,7 +11,10 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * @ApiResource(
- *     attributes={"access_control"="is_granted('ROLE_USER')"},
+ *     attributes={
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "pagination_items_per_page"=200,
+ *      },
  *     collectionOperations={
  *         "get"
  *     },
@@ -33,7 +36,7 @@ class Department
 
     /**
      * @ORM\Column(type="string", length=200)
-     * @Groups({"read_department", "read_group"})
+     * @Groups({"read_department", "read_group", "read_user"})
      */
     private $name;
 
