@@ -22,6 +22,7 @@ use App\Filter\MsDateFilter;
  *     attributes={
  *          "access_control"="is_granted('ROLE_USER')",
  *          "pagination_items_per_page"=6,
+ *          "filters"={MsDateFilter::class},
  *      },
  *     collectionOperations={
  *         "get",
@@ -59,8 +60,8 @@ use App\Filter\MsDateFilter;
  *     normalizationContext={"groups"={"read_group"}},
  *     denormalizationContext={"groups"={"write_group"}}
  * )
- * @ApiFilter(MsDateFilter::class)
  * @ApiFilter(SearchFilter::class, properties={"name": "partial", "department": "exact", "groupInterests": "exact"})
+ * @ApiFilter(OrderFilter::class)
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @UniqueEntity("name")
  * @ORM\Table(name="groups")
@@ -85,7 +86,7 @@ class Group
      * @ORM\Column(type="datetime")
      * @Groups({"read_group"})
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owned_group", cascade={"persist", "remove"}    )

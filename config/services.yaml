@@ -35,9 +35,10 @@ services:
         arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
         autoconfigure: false
 
-    'App\Filter\MsDateFilter':
-        arguments: [ '@doctrine']
-        autowire: true
+    App\Filter\MsDateFilter:
+        arguments: [ '@doctrine', ~, '@?logger', { msdate: ~ } ]
+        autoconfigure: false
+        tags: [ 'api_platform.filter' ]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

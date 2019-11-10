@@ -18,7 +18,10 @@ final class MsDateFilter extends AbstractContextAwareFilter
         ) {
             return;
         }
-        $queryBuilder->orderBy($property, 'ASC');
+
+        $queryBuilder
+            ->orderBy('name', 'ASC')
+            ->setParameter('msdate', $value);
     }
 
     // This function is only used to hook in documentation generators (supported by Swagger and Hydra)
@@ -28,19 +31,16 @@ final class MsDateFilter extends AbstractContextAwareFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $property => $strategy) {
-            $description["regexp_$property"] = [
-                'property' => $property,
+        $description["createdAt"] = [
+            'property' => "createdAt",
+            'type' => 'string',
+            'required' => false,
+            'swagger' => [
+                'description' => 'Sort by dates',
+                'name' => 'msdate',
                 'type' => 'string',
-                'required' => false,
-                'swagger' => [
-                    'description' => 'Filter using a regex. This will appear in the Swagger documentation!',
-                    'name' => 'Custom name to use in the Swagger documentation',
-                    'type' => 'Will appear below the name in the Swagger documentation',
-                ],
-            ];
-        }
+            ],
+        ];
 
         return $description;
     }
